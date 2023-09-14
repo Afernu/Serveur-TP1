@@ -42,7 +42,7 @@ function renderAbout() {
 }
 async function renderContacts() {
     showWaitingGif();
-    $("#actionTitle").text("Liste des contacts");
+    $("#actionTitle").text("Liste des favoris");
     $("#createContact").show();
     $("#abort").hide();
     let contacts = await Contacts_API.Get();
@@ -234,11 +234,10 @@ function renderContact(contact) {
      <div class="contactRow" contact_id=${contact.Id}>
         <div class="contactContainer noselect">
             <div class="contactLayout">
-            <div class="big-favicon" style="background-image: url('${faviconUrl}');">
-            </div>
-                <span class="contactName">${contact.Titre}</span>
-
-                <span class="contactPhone">${contact.Url}</span>
+                <div class="logo-and-title">
+                    <div class="big-favicon" style="background-image: url('${faviconUrl}');"></div>
+                    <span class="contactName">${contact.Titre}</span>
+                </div>
                 <span class="contactEmail">${contact.Categorie}</span>
             </div>
             <div class="contactCommandPanel">
@@ -249,6 +248,7 @@ function renderContact(contact) {
     </div>           
     `);
 }
+
 
 
 

@@ -54,6 +54,12 @@
     width: 48px;
     margin-right: 5px;
 }
+.logo-and-title {
+    display: flex;
+    align-items: center; 
+    margin-right: 5px;
+}
+
 #content {
     border: 1px solid #ccc;
     border-radius: 9px;
