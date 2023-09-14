@@ -115,9 +115,9 @@ async function renderDeleteContactForm(id) {
             <div class="contactRow" contact_id=${contact.Id}">
                 <div class="contactContainer">
                     <div class="contactLayout">
-                        <div class="contactName">${contact.Name}</div>
-                        <div class="contactPhone">${contact.Phone}</div>
-                        <div class="contactEmail">${contact.Email}</div>
+                        <div class="contactName">${contact.Titre}</div>
+                        <div class="contactPhone">${contact.Url}</div>
+                        <div class="contactEmail">${contact.Categorie}</div>
                     </div>
                 </div>  
             </div>   
@@ -144,12 +144,15 @@ async function renderDeleteContactForm(id) {
 function newContact() {
     contact = {};
     contact.Id = 0;
-    contact.Name = "";
-    contact.Phone = "";
-    contact.Email = "";
+    contact.Titre = "";
+    contact.Url = "";
+    contact.Categorie = "";
     return contact;
 }
 function renderContactForm(contact = null) {
+    const url = new URL("https://www.example.com");
+    const domain = url.hostname;
+
     $("#createContact").hide();
     $("#abort").show();
     eraseContent();
@@ -163,35 +166,35 @@ function renderContactForm(contact = null) {
             <label for="Name" class="form-label">Nom </label>
             <input 
                 class="form-control Alpha"
-                name="Name" 
+                name="Titre" 
                 id="Name" 
                 placeholder="Nom"
                 required
                 RequireMessage="Veuillez entrer un nom"
                 InvalidMessage="Le nom comporte un caractère illégal" 
-                value="${contact.Name}"
+                value="${contact.Titre}"
             />
-            <label for="Phone" class="form-label">Téléphone </label>
+            <label for="Phone" class="form-label">URL</label>
             <input
-                class="form-control Phone"
-                name="Phone"
+                class="form-control text"
+                name="Url"
                 id="Phone"
-                placeholder="(000) 000-0000"
+                placeholder=""
                 required
                 RequireMessage="Veuillez entrer votre téléphone" 
                 InvalidMessage="Veuillez entrer un téléphone valide"
-                value="${contact.Phone}" 
+                value="${contact.Url}" 
             />
-            <label for="Email" class="form-label">Courriel </label>
+            <label for="Email" class="form-label">Categorie </label>
             <input 
-                class="form-control Email"
-                name="Email"
+                class="form-control text"
+                name="Categorie"
                 id="Email"
                 placeholder="Courriel"
                 required
                 RequireMessage="Veuillez entrer votre courriel" 
                 InvalidMessage="Veuillez entrer un courriel valide"
-                value="${contact.Email}"
+                value="${contact.Categorie}"
             />
             <hr>
             <input type="submit" value="Enregistrer" id="saveContact" class="btn btn-primary">
@@ -225,13 +228,18 @@ function getFormData($form) {
 }
 
 function renderContact(contact) {
+    const faviconUrl = `http://www.google.com/s2/favicons?sz=64&domain=${contact.Url}`;
+
     return $(`
-     <div class="contactRow" contact_id=${contact.Id}">
+     <div class="contactRow" contact_id=${contact.Id}>
         <div class="contactContainer noselect">
             <div class="contactLayout">
-                <span class="contactName">${contact.Name}</span>
-                <span class="contactPhone">${contact.Phone}</span>
-                <span class="contactEmail">${contact.Email}</span>
+            <div class="big-favicon" style="background-image: url('${faviconUrl}');">
+            </div>
+                <span class="contactName">${contact.Titre}</span>
+
+                <span class="contactPhone">${contact.Url}</span>
+                <span class="contactEmail">${contact.Categorie}</span>
             </div>
             <div class="contactCommandPanel">
                 <span class="editCmd cmdIcon fa fa-pencil" editContactId="${contact.Id}" title="Modifier ${contact.Name}"></span>
@@ -240,4 +248,15 @@ function renderContact(contact) {
         </div>
     </div>           
     `);
+}
+
+
+
+function setWebsiteFavicon(url) {
+    const domain = new URL(url).hostname;
+    const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}`;
+
+    const faviconImg = document.getElementById("favicon");
+
+    faviconImg.src = faviconUrl;
 }
