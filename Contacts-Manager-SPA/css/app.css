@@ -50,8 +50,8 @@
     background-image: url("../bookmark_logo.png");
     background-size: contain;
     background-repeat: no-repeat;
-    height: 48px;
-    width: 48px;
+    height: 24px;
+    width: 24px;
     margin-right: 5px;
 }
 .logo-and-title {

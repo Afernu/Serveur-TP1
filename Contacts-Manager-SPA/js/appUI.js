@@ -14,6 +14,7 @@ function Init_UI() {
     $('#aboutCmd').on("click", function () {
         renderAbout();
     });
+
 }
 
 function renderAbout() {
@@ -25,10 +26,10 @@ function renderAbout() {
     $("#content").append(
         $(`
             <div class="aboutContainer">
-                <h2>Gestionnaire de contacts</h2>
+                <h2>Liste de favoris</h2>
                 <hr>
                 <p>
-                    Petite application de gestion de contacts à titre de démonstration
+                    Petite application de gestion de favoris à titre de démonstration
                     d'interface utilisateur monopage réactive.
                 </p>
                 <p>
@@ -65,6 +66,7 @@ async function renderContacts() {
     } else {
         renderError("Service introuvable");
     }
+
 }
 function showWaitingGif() {
     $("#content").empty();
@@ -106,6 +108,7 @@ async function renderDeleteContactForm(id) {
     $("#abort").show();
     $("#actionTitle").text("Retrait");
     let contact = await Contacts_API.Get(id);
+    const faviconUrl = `http://www.google.com/s2/favicons?sz=64&domain=${contact.Url}`;
     eraseContent();
     if (contact !== null) {
         $("#content").append(`
@@ -115,8 +118,13 @@ async function renderDeleteContactForm(id) {
             <div class="contactRow" contact_id=${contact.Id}">
                 <div class="contactContainer">
                     <div class="contactLayout">
+                    <div class="logo-and-title">
+
+                    <a href="${contact.Url}" target="_blank">
+                        <div class="big-favicon" style="background-image: url('${faviconUrl}');"></div>
+                    </a>
                         <div class="contactName">${contact.Titre}</div>
-                        <div class="contactPhone">${contact.Url}</div>
+                        </div>
                         <div class="contactEmail">${contact.Categorie}</div>
                     </div>
                 </div>  
@@ -181,7 +189,7 @@ function renderContactForm(contact = null) {
                 id="Phone"
                 placeholder=""
                 required
-                RequireMessage="Veuillez entrer votre téléphone" 
+                RequireMessage="Veuillez entrer l'URL" 
                 InvalidMessage="Veuillez entrer un téléphone valide"
                 value="${contact.Url}" 
             />
@@ -190,10 +198,10 @@ function renderContactForm(contact = null) {
                 class="form-control text"
                 name="Categorie"
                 id="Email"
-                placeholder="Courriel"
+                placeholder=""
                 required
-                RequireMessage="Veuillez entrer votre courriel" 
-                InvalidMessage="Veuillez entrer un courriel valide"
+                RequireMessage="Veuillez entrer la catégorie" 
+                InvalidMessage="Veuillez entrer une catégorie"
                 value="${contact.Categorie}"
             />
             <hr>
@@ -235,14 +243,16 @@ function renderContact(contact) {
         <div class="contactContainer noselect">
             <div class="contactLayout">
                 <div class="logo-and-title">
-                    <div class="big-favicon" style="background-image: url('${faviconUrl}');"></div>
+                    <a href="${contact.Url}" target="_blank">
+                        <div class="big-favicon" style="background-image: url('${faviconUrl}');"></div>
+                    </a>
                     <span class="contactName">${contact.Titre}</span>
                 </div>
                 <span class="contactEmail">${contact.Categorie}</span>
             </div>
             <div class="contactCommandPanel">
-                <span class="editCmd cmdIcon fa fa-pencil" editContactId="${contact.Id}" title="Modifier ${contact.Name}"></span>
-                <span class="deleteCmd cmdIcon fa fa-trash" deleteContactId="${contact.Id}" title="Effacer ${contact.Name}"></span>
+                <span class="editCmd cmdIcon fa fa-pencil" editContactId="${contact.Id}" title="Modifier ${contact.Titre}"></span>
+                <span class="deleteCmd cmdIcon fa fa-trash" deleteContactId="${contact.Id}" title="Effacer ${contact.Titre}"></span>
             </div>
         </div>
     </div>           
@@ -250,13 +260,3 @@ function renderContact(contact) {
 }
 
 
-
-
-function setWebsiteFavicon(url) {
-    const domain = new URL(url).hostname;
-    const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}`;
-
-    const faviconImg = document.getElementById("favicon");
-
-    faviconImg.src = faviconUrl;
-}
